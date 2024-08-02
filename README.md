@@ -1,7 +1,7 @@
 
 # Backend en Nest
 
-instalar modulos ```npm i`` 
+instalar modulos ```npm i```
 
 Copiar el ```.env.template``` y renombrarlo a ```.env```
 
