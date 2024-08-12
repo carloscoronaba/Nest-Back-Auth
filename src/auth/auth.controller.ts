@@ -5,43 +5,50 @@ import { CreateUserDto, LoginDto, RegisterUserDto, UpdateAuthDto } from './dto';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginResponse } from './interfaces/login-response';
 import { User } from './entities/user.entity';
+import { ActivarCuentaDto } from './dto/activarCuentaDto';
 
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
+
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
 
+  @Post('/activarCuenta')
+  activarCuenta(@Body() activarCuentaDto: ActivarCuentaDto) {
+    return this.authService.activarCuenta(activarCuentaDto);
+  }
+
   @Post('/login')
-  login( @Body() loginDto: LoginDto  ) {
-    return this.authService.login( loginDto );
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Post('/register')
-  register( @Body() registerDto: RegisterUserDto  ) {
-    return this.authService.register( registerDto );
+  register(@Body() registerDto: RegisterUserDto) {
+    return this.authService.register(registerDto);
   }
 
 
-  @UseGuards( AuthGuard )
+  @UseGuards(AuthGuard)
   @Get()
-  findAll( @Request() req: Request ) {
+  findAll(@Request() req: Request) {
     // const user = req['user'];
-    
+
     // return user;
     return this.authService.findAll();
   }
 
 
   // LoginResponse
-  @UseGuards( AuthGuard )
+  @UseGuards(AuthGuard)
   @Get('check-token')
-  checkToken( @Request() req: Request ): LoginResponse {
-      
+  checkToken(@Request() req: Request): LoginResponse {
+
     const user = req['user'] as User;
 
     return {

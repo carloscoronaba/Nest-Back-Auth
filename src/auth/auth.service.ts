@@ -11,6 +11,9 @@ import { User } from './entities/user.entity';
 
 import { JwtPayload } from './interfaces/jwt-payload';
 import { LoginResponse } from './interfaces/login-response';
+import { ActivarCuentaDto } from './dto/activarCuentaDto';
+
+
 
 @Injectable()
 export class AuthService {
@@ -21,6 +24,24 @@ export class AuthService {
 
     private jwtService: JwtService,
    ) {}
+
+   async activarCuenta(activarCuentaDto: ActivarCuentaDto): Promise<User> {
+    const { id, newPassword } = activarCuentaDto;
+    
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    
+    user.password = bcryptjs.hashSync(newPassword, 10);
+    // user.password = newPassword
+    user.isActive = true;
+    
+    await user.save();
+    
+    const { password, ...rest } = user.toJSON();
+    return rest;
+  }
 
   
   async create(createUserDto: CreateUserDto): Promise<User> {
